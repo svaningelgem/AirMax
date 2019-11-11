@@ -1,6 +1,7 @@
 import threading
 from listener import MyListener
 from webservice import MyWebService
+import webbrowser
 
 
 class SqsListener(threading.Thread):
@@ -25,6 +26,8 @@ if __name__ == "__main__":
 
         for t in threads:
             t.start()
+
+        webbrowser.open("http://127.0.0.1:5000/")
 
         for t in threads:
             t.join()
