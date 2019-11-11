@@ -13,6 +13,7 @@ class MyWebService:
     app = None
     port = DEFAULT_PORT
     GeoPoint = namedtuple("GeoPoint", ("lng", "lat"))
+    allowed_parameters = {'pm25': 20, 'pm10': 40, 'bc': 1.33, 'co': 4.5, 'no2': 0.25, 'o3': 0.065, 'so2': 0.085}
 
     def __init__(self, port=DEFAULT_PORT):
         self.port = port
@@ -28,6 +29,12 @@ class MyWebService:
     def send_index(self):
         return self.app.send_static_file('maps.html')
 
+    def _get_val(original_value, parameter):
+        # return original_value  # if not debugging!
+        # DEBUG
+        v = MyWebService.allowed_parameters[parameter]
+        return random.gauss(v, v * 1.5)  # when debugging
+
     def perform_query(self):
         args = request.args
 
@@ -35,7 +42,7 @@ class MyWebService:
                             # as we check it against a whitelist
         if 'parameter' in args:
             parameter = args['parameter']
-            if parameter not in ('pm10', 'pm25', 'co', 'no2', 'o3', 'so2', 'bc'):
+            if parameter not in MyWebService.allowed_parameters:
                 raise ValueError("Invalid parameter passed")
 
         retVal = dict()
@@ -60,7 +67,7 @@ class MyWebService:
                     retVal[cur] = row[2]
 
 #        return jsonify(list({'lng': k.lng, 'lat': k.lat, 'val': v} for k, v in retVal.items()))
-        return jsonify(list({'lng': k.lng, 'lat': k.lat, 'val': random.random()*100.0} for k, v in retVal.items()))
+        return jsonify(list({'lng': k.lng, 'lat': k.lat, 'val': MyWebService._get_val(v, parameter)} for k, v in retVal.items()))
 
 
 if __name__ == '__main__':
