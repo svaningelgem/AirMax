@@ -9,13 +9,22 @@ class SqsListener(threading.Thread):
         listener.listen()
 
 
+class Webserver(threading.Thread):
+    def run(self):
+        web = MyWebService()
+        web.run()
+
+
 if __name__ == "__main__":
     threads = list()
 
     try:
         # Start all our logic in separate threads
-        threads.append(SqsListener().start())  # Ingest SQS data --> Store in SQLite
-        threads.append(MyWebService())         # Start flask service to provide AJAX support
+        threads.append(SqsListener())  # Ingest SQS data --> Store in SQLite
+        threads.append(Webserver())         # Start flask service to provide AJAX support
+
+        for t in threads:
+            t.start()
 
         for t in threads:
             t.join()
