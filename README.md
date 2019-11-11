@@ -3,21 +3,29 @@ pip install pySqsListener sqlite3 dateutil Flask webbrowser
 
 ### Necessary setup:
 You'll need the following environment variables:
-* AWS_ACCOUNT_ID
+```
+AWS_ACCOUNT_ID
+```
 
 You'll need the following files:
 ~/.aws/config
-> [default]
-> region=eu-west-1
+```
+[default]
+region=eu-west-1
+```
 
 ~/.aws/credentials
-> [default]
-> aws_access_key_id = <access key>
-> aws_secret_access_key = <secret key>
+```
+[default]
+aws_access_key_id = <access key>
+aws_secret_access_key = <secret key>
+```
 
 
 ### Running it
-> python start.py
+```
+python start.py
+```
 
 This will start the SQS listener as well as the webserver.
 Additionally it will open a web browser to the map interface.
