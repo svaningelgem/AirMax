@@ -1,12 +1,12 @@
 import sqlite3
 from config import Config
-import logging
 
 
 class Cursor:
     def __init__(self, db):
         if isinstance(db, Database):
             self.db = db.db
+            self.db_up = db  # we'll need to save this just to keep a strong reference around till the end of the cursor.
         elif isinstance(db, sqlite3.Connection):
             self.db = db
         else:
