@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
 from database import Database, Cursor
 from collections import namedtuple
-import os
+
+# DEBUG
+import random
 
 
 DEFAULT_PORT = 5000
@@ -57,7 +59,8 @@ class MyWebService:
                 if row[3] == 'average' or cur not in retVal:
                     retVal[cur] = row[2]
 
-        return jsonify(list({'lng': k.lng, 'lat': k.lat, 'val': v} for k, v in retVal.items()))
+#        return jsonify(list({'lng': k.lng, 'lat': k.lat, 'val': v} for k, v in retVal.items()))
+        return jsonify(list({'lng': k.lng, 'lat': k.lat, 'val': random.random()*100.0} for k, v in retVal.items()))
 
 
 if __name__ == '__main__':
