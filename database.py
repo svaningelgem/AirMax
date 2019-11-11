@@ -1,10 +1,16 @@
 import sqlite3
 from config import Config
+import logging
 
 
 class Cursor:
     def __init__(self, db):
-        self.db = db
+        if isinstance(db, Database):
+            self.db = db.db
+        elif isinstance(db, sqlite3.Connection):
+            self.db = db
+        else:
+            raise ValueError("Invalid database passed!")
 
     def __enter__(self):
         self.cursor = self.db.cursor()
@@ -41,7 +47,7 @@ class Database:
                 parameter VARCHAR(200),
                 sourceType VARCHAR(200),
                 sourceName VARCHAR(200),
-                PRIMARY KEY(date, latitude, longitude)
+                PRIMARY KEY(date, latitude, longitude, parameter)
             )""")
 
     def __del__(self):
@@ -53,8 +59,11 @@ class Database:
             c.execute("DELETE FROM air_quality WHERE date < DATETIME('now') - 3*60*60")
 
     def add_measurement(self, date, latitude, longitude, country, city, location, value, unit, parameter, sourceType, sourceName):
+        data = (date, latitude, longitude, country, city, location, value, unit, parameter, sourceType, sourceName)
+        print(">> Adding ", data)
+
         with Cursor(self.db) as c:
-            c.execute(
+            c.execute(  # I use REPLACE because I think later data could provide corrections on earlier received information
                 "REPLACE INTO air_quality(date, latitude, longitude, country, city, location, value, unit, parameter, sourceType, sourceName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (date, latitude, longitude, country, city, location, value, unit, parameter, sourceType, sourceName)
+                data
             )
