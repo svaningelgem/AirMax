@@ -1,0 +1,18 @@
+- SQS connection
+- get data
+- store in database
+- show map
+- load data points on map
+
+
+
+Q?
+
+What is air quality? Is it pm10/pm25?
+>> http://www.irceline.be/nl/documentatie/faq/wat-is-fijnstof
+>> PM10 is particulate matter 10 micrometers or less in diameter, PM2.5 is particulate matter 2.5 micrometers or less in diameter. PM2.5 is generally described as fine particles. By way of comparison, a human hair is about 100 micrometres, so roughly 40 fine particles could be placed on its width.
+>> PM10 op jaar basis: 40 µg/m³, dagbasis: 50 µg/m³
+>> PM25 op jaar basis: 25 µg/m³, vanaf 2020: 20 µg/m³
+
+Other entries in the data:
+co, no2, o3 (ozon), so2
