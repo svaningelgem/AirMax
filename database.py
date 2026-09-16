@@ -1,4 +1,5 @@
 import sqlite3
+
 from config import Config
 
 
@@ -6,7 +7,9 @@ class Cursor:
     def __init__(self, db):
         if isinstance(db, Database):
             self.db = db.db
-            self.db_up = db  # we'll need to save this just to keep a strong reference around till the end of the cursor.
+            self.db_up = (
+                db  # we'll need to save this just to keep a strong reference around till the end of the cursor.
+            )
         elif isinstance(db, sqlite3.Connection):
             self.db = db
         else:
@@ -32,7 +35,7 @@ class Cursor:
 
 class Database:
     def __init__(self):
-        self.db = sqlite3.connect(Config.cache_dir + '/database.sqlite3')
+        self.db = sqlite3.connect(Config.cache_dir + "/database.sqlite3")
         self.db.isolation_level = None
         self.db.execute("""
             CREATE TABLE IF NOT EXISTS air_quality(
@@ -58,12 +61,14 @@ class Database:
         with Cursor(self.db) as c:
             c.execute("DELETE FROM air_quality WHERE date < DATETIME('now') - 3*60*60")
 
-    def add_measurement(self, date, latitude, longitude, country, city, location, value, unit, parameter, sourceType, sourceName):
+    def add_measurement(
+        self, date, latitude, longitude, country, city, location, value, unit, parameter, sourceType, sourceName
+    ):
         data = (date, latitude, longitude, country, city, location, value, unit, parameter, sourceType, sourceName)
         print(">> Adding ", data)
 
         with Cursor(self.db) as c:
             c.execute(  # I use REPLACE because I think later data could provide corrections on earlier received information
                 "REPLACE INTO air_quality(date, latitude, longitude, country, city, location, value, unit, parameter, sourceType, sourceName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                data
+                data,
             )
