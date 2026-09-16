@@ -1,5 +1,5 @@
 ### Necessary libraries:
-pip install pySqsListener sqlite3 dateutil Flask webbrowser
+uv sync
 
 ### Necessary setup:
 You'll need the following environment variables:
