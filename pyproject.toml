@@ -1,0 +1,12 @@
+[project]
+name = "airmax"
+version = "0.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "pySqsListener",
+    "python-dateutil",
+    "flask",
+]
+
+[tool.uv]
+package = false
