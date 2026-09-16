@@ -2,6 +2,7 @@ import glob
 import json
 
 import dateutil
+
 from database import Database
 from listener import MyListener
 
@@ -12,7 +13,9 @@ for f in glob.glob("cache/tmp*"):
 
         country = MyListener._get_value(body, "country", "")
         db.add_measurement(
-            date=dateutil.parser.parse(MyListener._get_value(body, "date_utc")).timestamp(),
+            date=dateutil.parser.parse(
+                MyListener._get_value(body, "date_utc")
+            ).timestamp(),
             latitude=MyListener._get_value(body, "latitude"),
             longitude=MyListener._get_value(body, "longitude"),
             country=country,
