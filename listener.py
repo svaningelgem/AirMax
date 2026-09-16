@@ -3,9 +3,10 @@ import os
 import tempfile
 
 import dateutil.parser
+from sqs_listener import SqsListener
+
 from config import Config
 from database import Database
-from sqs_listener import SqsListener
 
 
 class MyListener(SqsListener):
@@ -40,7 +41,9 @@ class MyListener(SqsListener):
 
     def handle_message(self, body, attributes, messages_attributes):
         # Save for debugging purposes
-        with tempfile.NamedTemporaryFile(dir=Config.cache_dir, delete=False, mode="w") as tmp:
+        with tempfile.NamedTemporaryFile(
+            dir=Config.cache_dir, delete=False, mode="w"
+        ) as tmp:
             json.dump(obj=body, fp=tmp)
 
         # We only want Belgian ones here! (ok it's preselected, but I still like to make certain)
@@ -49,7 +52,9 @@ class MyListener(SqsListener):
             return
 
         self.db.add_measurement(
-            date=dateutil.parser.parse(MyListener._get_value(body, "date_utc")).timestamp(),
+            date=dateutil.parser.parse(
+                MyListener._get_value(body, "date_utc")
+            ).timestamp(),
             latitude=MyListener._get_value(body, "latitude"),
             longitude=MyListener._get_value(body, "longitude"),
             country=country,

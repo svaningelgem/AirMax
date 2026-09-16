@@ -2,8 +2,9 @@
 import random
 from collections import namedtuple
 
-from database import Cursor, Database
 from flask import Flask, jsonify, request
+
+from database import Cursor, Database
 
 DEFAULT_PORT = 5000
 
@@ -12,7 +13,15 @@ class MyWebService:
     app = None
     port = DEFAULT_PORT
     GeoPoint = namedtuple("GeoPoint", ("lng", "lat"))
-    allowed_parameters = {"pm25": 20, "pm10": 40, "bc": 1.33, "co": 4.5, "no2": 0.25, "o3": 0.065, "so2": 0.085}
+    allowed_parameters = {
+        "pm25": 20,
+        "pm10": 40,
+        "bc": 1.33,
+        "co": 4.5,
+        "no2": 0.25,
+        "o3": 0.065,
+        "so2": 0.085,
+    }
 
     def __init__(self, port=DEFAULT_PORT):
         self.port = port
@@ -67,7 +76,10 @@ class MyWebService:
 
         #        return jsonify(list({'lng': k.lng, 'lat': k.lat, 'val': v} for k, v in retVal.items()))
         return jsonify(
-            [{"lng": k.lng, "lat": k.lat, "val": MyWebService._get_val(v, parameter)} for k, v in retVal.items()]
+            [
+                {"lng": k.lng, "lat": k.lat, "val": MyWebService._get_val(v, parameter)}
+                for k, v in retVal.items()
+            ]
         )
 
 

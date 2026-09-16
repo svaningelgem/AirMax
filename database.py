@@ -7,9 +7,7 @@ class Cursor:
     def __init__(self, db):
         if isinstance(db, Database):
             self.db = db.db
-            self.db_up = (
-                db  # we'll need to save this just to keep a strong reference around till the end of the cursor.
-            )
+            self.db_up = db  # we'll need to save this just to keep a strong reference around till the end of the cursor.
         elif isinstance(db, sqlite3.Connection):
             self.db = db
         else:
@@ -62,9 +60,32 @@ class Database:
             c.execute("DELETE FROM air_quality WHERE date < DATETIME('now') - 3*60*60")
 
     def add_measurement(
-        self, date, latitude, longitude, country, city, location, value, unit, parameter, sourceType, sourceName
+        self,
+        date,
+        latitude,
+        longitude,
+        country,
+        city,
+        location,
+        value,
+        unit,
+        parameter,
+        sourceType,
+        sourceName,
     ):
-        data = (date, latitude, longitude, country, city, location, value, unit, parameter, sourceType, sourceName)
+        data = (
+            date,
+            latitude,
+            longitude,
+            country,
+            city,
+            location,
+            value,
+            unit,
+            parameter,
+            sourceType,
+            sourceName,
+        )
         print(">> Adding ", data)
 
         with Cursor(self.db) as c:
